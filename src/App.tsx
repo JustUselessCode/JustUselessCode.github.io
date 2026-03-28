@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js';
 import { createSignal, onMount, onCleanup } from 'solid-js';
 
-const TARGET_DATE = new Date('2026-06-27T18:00:00');
+const TARGET_DATE = new Date('2026-06-21T14:00:00');
 
 const App: Component = () => {
   const [remainingMs, setRemainingMs] = createSignal<number>(Math.max(0, TARGET_DATE.getTime() - Date.now()));
