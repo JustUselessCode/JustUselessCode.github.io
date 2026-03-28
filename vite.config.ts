@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
-import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
-  plugins: [devtools(), solidPlugin()],
+  plugins: [solidPlugin()],
+  base: '/JustUselessCode.github.io/', // MUST match your GitHub repo name exactly
   server: {
     port: 3000,
   },
