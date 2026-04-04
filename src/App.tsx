@@ -34,13 +34,13 @@ const App: Component = () => {
   return (
     <main class="app-root">
       <header class="header">
-        <h1>Return-Time:</h1>
-        <p class="subtitle">Return-Date: {TARGET_DATE.toDateString()}</p>
-        <p class="subtitle">Halfway-Date: {HALF_WAY_DATE.toDateString()}</p>
+        <h1>Counting down to:</h1>
       </header>
 
       <section class="timer" aria-live="polite">
-        <h4>Return:</h4>
+        <h4>Return:
+          <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
+        </h4>
         <div class="time-grid">
           <div class="card">
             <div class="value">{days(remainingMs())}</div>
@@ -62,7 +62,9 @@ const App: Component = () => {
       </section>
 
       <section class="timer">
-        <h4>Halfwaypoint:</h4>
+        <h4>Halfwaypoint:
+          <p class="subtitle">{HALF_WAY_DATE.toLocaleDateString()}</p>
+        </h4>
         <div class="time-grid">
           <div class="card">
             <div class="value">{days(halfWayRemainingMs())}</div>
