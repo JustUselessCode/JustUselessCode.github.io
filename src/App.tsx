@@ -34,8 +34,9 @@ const App: Component = () => {
   return (
     <main class="app-root">
       <header class="header">
-        <h1>Time:</h1>
-        <p class="subtitle">Counting down to {TARGET_DATE.toDateString()}</p>
+        <h1>Return-Time:</h1>
+        <p class="subtitle">Return-Date: {TARGET_DATE.toDateString()}</p>
+        <p class="subtitle">Halfway-Date: {HALF_WAY_DATE.toDateString()}</p>
       </header>
 
       <section class="timer" aria-live="polite">
