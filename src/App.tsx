@@ -2,8 +2,8 @@ import type { Component } from 'solid-js';
 import { createSignal, onMount, onCleanup } from 'solid-js';
 
 const TARGET_DATE = new Date('2026-06-21T10:45:00');
-// Halfway between now and the target date (compute at mount)
-const HALF_WAY_DATE = new Date((Date.now() + TARGET_DATE.getTime()) / 2);
+const START_DATE = new Date('2026-03-27T10:45:00');
+const HALF_WAY_DATE = new Date((START_DATE.getTime() + TARGET_DATE.getTime()) / 2);
 
 const App: Component = () => {
   const [remainingMs, setRemainingMs] = createSignal<number>(Math.max(0, TARGET_DATE.getTime() - Date.now()));
@@ -33,11 +33,8 @@ const App: Component = () => {
 
   return (
     <main class="app-root">
-      <header class="header">
-        <h1>Counting down to:</h1>
-      </header>
-
       <section class="timer" aria-live="polite">
+      <h1>Counting down to:</h1>
         <h4>Return:
           <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
         </h4>
