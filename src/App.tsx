@@ -6,10 +6,14 @@ const START_DATE = new Date('2026-03-27T10:45:00');
 const HALF_WAY_DATE = new Date((START_DATE.getTime() + TARGET_DATE.getTime()) / 2);
 
 const App: Component = () => {
-  const [remainingMs, setRemainingMs] = createSignal<number>(Math.max(0, TARGET_DATE.getTime() - Date.now()));
-  const [halfWayRemainingMs, setHalfWayRemainingMs] = createSignal<number>(Math.max(0, HALF_WAY_DATE.getTime() - Date.now()));
+  const [remainingMs, setRemainingMs] =
+    createSignal<number>(Math.max(0, TARGET_DATE.getTime() - Date.now()));
+
+  const [halfWayRemainingMs, setHalfWayRemainingMs] =
+    createSignal<number>(Math.max(0, HALF_WAY_DATE.getTime() - Date.now()));
 
   let timer = 0;
+  
   onMount(() => {
     timer = window.setInterval(() => {
       setRemainingMs(Math.max(0, TARGET_DATE.getTime() - Date.now()));
@@ -34,7 +38,7 @@ const App: Component = () => {
   return (
     <main class="app-root">
       <section class="timer" aria-live="polite">
-      <h1>Counting down to:</h1>
+        <h1>Counting down to:</h1>
         <h4>Return:
           <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
         </h4>
