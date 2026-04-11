@@ -4,6 +4,7 @@ import { createSignal, onMount, onCleanup } from 'solid-js';
 const TARGET_DATE = new Date('2026-06-21T10:45:00');
 const START_DATE = new Date('2026-03-27T10:45:00');
 const HALF_WAY_DATE = new Date((START_DATE.getTime() + TARGET_DATE.getTime()) / 2);
+const loves = ['😘', '😍', '🥰', '❤️'];
 
 const App: Component = () => {
   const [remainingMs, setRemainingMs] =
@@ -12,7 +13,7 @@ const App: Component = () => {
   const [halfWayRemainingMs, setHalfWayRemainingMs] =
     createSignal<number>(Math.max(0, HALF_WAY_DATE.getTime() - Date.now()));
 
-  const [kisses, setKisses] = createSignal<number>(0);
+  // const [kisses, setKisses] = createSignal<number>(0);
 
   let timer = 0;
 
@@ -89,9 +90,13 @@ const App: Component = () => {
   );
 };
 
+function getRandomLoveEmoji() {
+  return loves[Math.floor(Math.random() * loves.length)];
+}
+
 function spawnKissEmoji() {
   const kiss = document.createElement('div');
-  kiss.textContent = '😘';
+  kiss.textContent = getRandomLoveEmoji();
   kiss.className = 'kiss';
   kiss.style.position = 'fixed';
   kiss.style.pointerEvents = 'none';
