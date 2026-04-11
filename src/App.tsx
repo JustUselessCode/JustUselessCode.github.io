@@ -17,11 +17,28 @@ const App: Component = () => {
 
   let timer = 0;
 
+  const [isCute, setIsCute] = createSignal<boolean>(false);
+
   onMount(() => {
+    // timer
     timer = window.setInterval(() => {
       setRemainingMs(Math.max(0, TARGET_DATE.getTime() - Date.now()));
       setHalfWayRemainingMs(Math.max(0, HALF_WAY_DATE.getTime() - Date.now()));
     }, 1000);
+
+    // theme: read persisted preference or current document setting
+    try {
+      const pref = localStorage.getItem('theme');
+      if (pref === 'cute') {
+        document.documentElement.dataset.theme = 'cute';
+        setIsCute(true);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        setIsCute(false);
+      }
+    } catch (e) {
+      // ignore
+    }
   });
 
   onCleanup(() => {
@@ -37,6 +54,30 @@ const App: Component = () => {
 
   return (
     <main class="app-root">
+      <div class="header">
+        <h1>Reunion Timer</h1>
+        <div class="theme-toggle">
+          <div class="label">Cute</div>
+          <label class="switch">
+            <input
+              type="checkbox"
+              checked={isCute()}
+              onInput={(e) => {
+                const checked = (e.currentTarget as HTMLInputElement).checked;
+                if (checked) {
+                  document.documentElement.dataset.theme = 'cute';
+                  try { localStorage.setItem('theme', 'cute'); } catch (e) {}
+                } else {
+                  document.documentElement.removeAttribute('data-theme');
+                  try { localStorage.setItem('theme', 'default'); } catch (e) {}
+                }
+                setIsCute(checked);
+              }}
+            />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
       <div class="card">
         <div class="value">{loveClicks()} / 20</div>
         <div class="label">Love Clicks</div>
@@ -46,7 +87,6 @@ const App: Component = () => {
       </div>
 
       <section class="timer" aria-live="polite">
-        <h1>Counting down to:</h1>
         <h4>Return:
           <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
         </h4>
@@ -112,7 +152,6 @@ function handleLoveClick() {
   } else {
     spawnKissEmoji();
   }
-
 }
 
 function getRandomLoveEmoji() {
