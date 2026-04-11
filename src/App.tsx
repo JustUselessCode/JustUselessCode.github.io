@@ -40,10 +40,11 @@ const App: Component = () => {
       <div class="card">
         <div class="value">{loveClicks()} / 20</div>
         <div class="label">Love Clicks</div>
+        <button class="kiss-button" onClick={handleLoveClick}>
+          Love
+        </button>
       </div>
-      <button class="kiss-button" onClick={handleLoveClick}>
-        Love
-      </button>
+
       <section class="timer" aria-live="polite">
         <h1>Counting down to:</h1>
         <h4>Return:
@@ -104,7 +105,7 @@ function handleLoveClick() {
   } else {
     setLoveClicks(loveCount);
   }
-  
+
   if (loveCount % 20 === 0) {
     loveOverload();
   } else {
