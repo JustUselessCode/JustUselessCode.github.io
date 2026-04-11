@@ -21,9 +21,7 @@
 }
 
 .kiss-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+  /* Default: inline button so it sits inside cards on small screens */
   padding: 12px 22px;
   font-size: 16px;
   background: linear-gradient(90deg,var(--accent1),var(--accent2));
@@ -32,10 +30,22 @@
   border-radius: 999px;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(255,157,184,0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.kiss-button:hover {
-  transform: translateY(-2px);
+/* Floating behaviour only on wider viewports */
+@media (min-width:760px) {
+  .kiss-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .kiss-button:hover {
+    transform: translateY(-2px);
+  }
 }
 
 *{box-sizing:border-box}
