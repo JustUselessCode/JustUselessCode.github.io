@@ -7,6 +7,23 @@
   --muted:#9aa4b2;
 }
 
+.kiss-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.kiss-button:hover {
+  background-color: #5ee0a1;
+}
+
 *{box-sizing:border-box}
 html,body,#root{height:100%}
 body{
@@ -54,4 +71,15 @@ body{
   .time-grid{grid-template-columns:repeat(2,1fr)}
   .value{font-size:24px}
   .app-root{padding:20px}
+}
+
+/* Floating kiss emoji */
+.kiss{
+  position:fixed;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  will-change:transform,opacity;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
