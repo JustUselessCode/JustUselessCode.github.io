@@ -57,7 +57,7 @@ const App: Component = () => {
       <div class="header">
         <h1>Reunion Timer</h1>
         <div class="theme-toggle">
-          <div class="label">Cute</div>
+          <div class="label">{isCute() ? 'Cool' : 'Cute'}</div>
           <label class="switch">
             <input
               type="checkbox"
@@ -66,7 +66,10 @@ const App: Component = () => {
                 const checked = (e.currentTarget as HTMLInputElement).checked;
                 if (checked) {
                   document.documentElement.dataset.theme = 'cute';
-                  try { localStorage.setItem('theme', 'cute'); } catch (e) {}
+                  try { 
+                    localStorage.setItem('theme', 'cute'); 
+                    
+                  } catch (e) {}
                 } else {
                   document.documentElement.removeAttribute('data-theme');
                   try { localStorage.setItem('theme', 'default'); } catch (e) {}
