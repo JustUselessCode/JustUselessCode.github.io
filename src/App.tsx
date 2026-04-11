@@ -1,5 +1,5 @@
-import type { Component } from 'solid-js';
-import { createSignal, onMount, onCleanup } from 'solid-js';
+import { Component, createSignal, onMount, onCleanup } from 'solid-js';
+import funFacts from './assets/funfacts.json';
 
 const TARGET_DATE = new Date('2026-06-21T10:45:00');
 const START_DATE = new Date('2026-03-27T10:45:00');
@@ -7,6 +7,7 @@ const HALF_WAY_DATE = new Date((START_DATE.getTime() + TARGET_DATE.getTime()) / 
 const loves = ['😘', '😍', '🥰', '❤️'];
 let loveCount = 0;
 const [loveClicks, setLoveClicks] = createSignal<number>(0);
+const funfacts = funFacts.facts;
 
 const App: Component = () => {
   const [remainingMs, setRemainingMs] =
@@ -18,6 +19,8 @@ const App: Component = () => {
   let timer = 0;
 
   const [isCute, setIsCute] = createSignal<boolean>(false);
+
+  const [funFact, setFunFact] = createSignal<string>(getRandomFunFact());
 
   onMount(() => {
     // timer
@@ -52,91 +55,104 @@ const App: Component = () => {
 
   const twoDigit = (n: number) => n.toString().padStart(2, '0');
 
+  const newFunFactButtonHandler = () => {
+    setFunFact(getRandomFunFact());
+  }
+
   return (
-    <main class="app-root">
-      <div class="header">
-        <h1>Reunion Timer</h1>
-        <div class="theme-toggle">
-          <div class="label">{isCute() ? 'Cool' : 'Cute'}</div>
-          <label class="switch">
-            <input
-              type="checkbox"
-              checked={isCute()}
-              onInput={(e) => {
-                const checked = (e.currentTarget as HTMLInputElement).checked;
-                if (checked) {
-                  document.documentElement.dataset.theme = 'cute';
-                  try { 
-                    localStorage.setItem('theme', 'cute'); 
-                    
-                  } catch (e) {}
-                } else {
-                  document.documentElement.removeAttribute('data-theme');
-                  try { localStorage.setItem('theme', 'default'); } catch (e) {}
-                }
-                setIsCute(checked);
-              }}
-            />
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-      <div class="card">
-        <div class="value">{loveClicks()} / 20</div>
-        <div class="label">Love Clicks</div>
-        <button class="kiss-button" onClick={handleLoveClick}>
-          Love
-        </button>
-      </div>
+    <div class="page">
+      <main class="app-root">
+        <div class="header">
+          <h1>Reunion Timer</h1>
+          <div class="theme-toggle">
+            <label class="switch">
+              <input
+                type="checkbox"
+                checked={isCute()}
+                onInput={(e) => {
+                  const checked = (e.currentTarget as HTMLInputElement).checked;
+                  if (checked) {
+                    document.documentElement.dataset.theme = 'cute';
+                    try {
+                      localStorage.setItem('theme', 'cute');
 
-      <section class="timer" aria-live="polite">
-        <h4>Return:
-          <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
-        </h4>
-        <div class="time-grid">
-          <div class="card">
-            <div class="value">{days(remainingMs())}</div>
-            <div class="label">Days</div>
-          </div>
-          <div class="card">
-            <div class="value">{twoDigit(hours(remainingMs()))}</div>
-            <div class="label">Hours</div>
-          </div>
-          <div class="card">
-            <div class="value">{twoDigit(minutes(remainingMs()))}</div>
-            <div class="label">Minutes</div>
-          </div>
-          <div class="card">
-            <div class="value">{twoDigit(seconds(remainingMs()))}</div>
-            <div class="label">Seconds</div>
+                    } catch (e) { }
+                  } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'default'); } catch (e) { }
+                  }
+                  setIsCute(checked);
+                }}
+              />
+              <span class="slider"></span>
+            </label>
+            <div class="label">Cute</div>
           </div>
         </div>
-      </section>
+        <div class="card">
+          <div class="value">{loveClicks()} / 20</div>
+          <button class="kiss-button" onClick={handleLoveClick}>
+            Love
+          </button>
+        </div>
 
-      <section class="timer">
-        <h4>Halfwaypoint:
-          <p class="subtitle">{HALF_WAY_DATE.toLocaleDateString()}</p>
-        </h4>
-        <div class="time-grid">
-          <div class="card">
-            <div class="value">{days(halfWayRemainingMs())}</div>
-            <div class="label">Days</div>
+        <section class="timer" aria-live="polite">
+          <h4>Return:
+            <p class="subtitle">{TARGET_DATE.toLocaleDateString()}</p>
+          </h4>
+          <div class="time-grid">
+            <div class="card">
+              <div class="value">{days(remainingMs())}</div>
+              <div class="label">Days</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(hours(remainingMs()))}</div>
+              <div class="label">Hours</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(minutes(remainingMs()))}</div>
+              <div class="label">Minutes</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(seconds(remainingMs()))}</div>
+              <div class="label">Seconds</div>
+            </div>
           </div>
-          <div class="card">
-            <div class="value">{twoDigit(hours(halfWayRemainingMs()))}</div>
-            <div class="label">Hours</div>
+        </section>
+
+        <section class="timer">
+          <h4>Halfwaypoint:
+            <p class="subtitle">{HALF_WAY_DATE.toLocaleDateString()}</p>
+          </h4>
+          <div class="time-grid">
+            <div class="card">
+              <div class="value">{days(halfWayRemainingMs())}</div>
+              <div class="label">Days</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(hours(halfWayRemainingMs()))}</div>
+              <div class="label">Hours</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(minutes(halfWayRemainingMs()))}</div>
+              <div class="label">Minutes</div>
+            </div>
+            <div class="card">
+              <div class="value">{twoDigit(seconds(halfWayRemainingMs()))}</div>
+              <div class="label">Seconds</div>
+            </div>
           </div>
-          <div class="card">
-            <div class="value">{twoDigit(minutes(halfWayRemainingMs()))}</div>
-            <div class="label">Minutes</div>
-          </div>
-          <div class="card">
-            <div class="value">{twoDigit(seconds(halfWayRemainingMs()))}</div>
-            <div class="label">Seconds</div>
-          </div>
+        </section>
+      </main>
+
+      <aside class="fun-fact">
+        <div class="fun-fact-header">
+          <h4>Canada — Fun Fact</h4>
+          <button class="btn" onClick={newFunFactButtonHandler}>Next</button>
         </div>
-      </section>
-    </main>
+        <div class="value">{funFact()}</div>
+      </aside>
+    </div>
   );
 };
 
@@ -195,6 +211,10 @@ function spawnKissEmoji() {
   setTimeout(() => {
     if (love.parentNode) love.parentNode.removeChild(love);
   }, 5000);
+}
+
+function getRandomFunFact() {
+  return funfacts[Math.floor(Math.random() * funfacts.length)];
 }
 
 export default App;
