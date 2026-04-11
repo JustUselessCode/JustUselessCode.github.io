@@ -1,5 +1,5 @@
 import { Component, createSignal, onMount, onCleanup } from 'solid-js';
-import funFacts from './assets/funfacts.json';
+import funFacts from './assets/funFacts.json';
 
 const TARGET_DATE = new Date('2026-06-21T10:45:00');
 const START_DATE = new Date('2026-03-27T10:45:00');
