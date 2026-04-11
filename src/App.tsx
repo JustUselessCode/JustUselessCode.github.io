@@ -102,6 +102,7 @@ function handleLoveClick() {
   const clicks = loveClicks();
   if (clicks == 20) {
     setLoveClicks(0);
+    loveCount = 0;
   } else {
     setLoveClicks(loveCount);
   }
