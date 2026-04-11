@@ -5,6 +5,8 @@ const TARGET_DATE = new Date('2026-06-21T10:45:00');
 const START_DATE = new Date('2026-03-27T10:45:00');
 const HALF_WAY_DATE = new Date((START_DATE.getTime() + TARGET_DATE.getTime()) / 2);
 const loves = ['😘', '😍', '🥰', '❤️'];
+let loveCount = 0;
+const [loveClicks, setLoveClicks] = createSignal<number>(0);
 
 const App: Component = () => {
   const [remainingMs, setRemainingMs] =
@@ -12,8 +14,6 @@ const App: Component = () => {
 
   const [halfWayRemainingMs, setHalfWayRemainingMs] =
     createSignal<number>(Math.max(0, HALF_WAY_DATE.getTime() - Date.now()));
-
-  // const [kisses, setKisses] = createSignal<number>(0);
 
   let timer = 0;
 
@@ -37,7 +37,13 @@ const App: Component = () => {
 
   return (
     <main class="app-root">
-      <button class="kiss-button" onClick={spawnKissEmoji}>Love</button>
+      <div class="card">
+        <div class="value">{loveClicks()} / 20</div>
+        <div class="label">Love Clicks</div>
+      </div>
+      <button class="kiss-button" onClick={handleLoveClick}>
+        Love
+      </button>
       <section class="timer" aria-live="polite">
         <h1>Counting down to:</h1>
         <h4>Return:
@@ -90,38 +96,61 @@ const App: Component = () => {
   );
 };
 
+function handleLoveClick() {
+  loveCount += 1;
+  const clicks = loveClicks();
+  if (clicks == 20) {
+    setLoveClicks(0);
+  } else {
+    setLoveClicks(loveCount);
+  }
+  
+  if (loveCount % 20 === 0) {
+    loveOverload();
+  } else {
+    spawnKissEmoji();
+  }
+
+}
+
 function getRandomLoveEmoji() {
   return loves[Math.floor(Math.random() * loves.length)];
 }
 
+function loveOverload() {
+  for (let i = 0; i < 80; i++) {
+    spawnKissEmoji();
+  }
+}
+
 function spawnKissEmoji() {
-  const kiss = document.createElement('div');
-  kiss.textContent = getRandomLoveEmoji();
-  kiss.className = 'kiss';
-  kiss.style.position = 'fixed';
-  kiss.style.pointerEvents = 'none';
-  kiss.style.zIndex = '9999';
+  const love = document.createElement('div');
+  love.textContent = getRandomLoveEmoji();
+  love.className = 'kiss';
+  love.style.position = 'fixed';
+  love.style.pointerEvents = 'none';
+  love.style.zIndex = '9999';
   const size = 22 + Math.floor(Math.random() * 22); // random size between 22-44px
-  kiss.style.fontSize = `${size}px`;
+  love.style.fontSize = `${size}px`;
   const maxX = Math.max(0, window.innerWidth - size - 8);
   const maxY = Math.max(0, window.innerHeight - size - 8);
   const x = Math.floor(Math.random() * maxX);
   const y = Math.floor(Math.random() * maxY);
-  kiss.style.left = `${x}px`;
-  kiss.style.top = `${y}px`;
-  kiss.style.opacity = '1';
-  kiss.style.transform = 'translateY(0)';
-  kiss.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
-  document.body.appendChild(kiss);
+  love.style.left = `${x}px`;
+  love.style.top = `${y}px`;
+  love.style.opacity = '1';
+  love.style.transform = 'translateY(0)';
+  love.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
+  document.body.appendChild(love);
   // trigger float up + fade out
   requestAnimationFrame(() => {
-    kiss.style.transform = 'translateY(-80px)';
-    kiss.style.opacity = '0';
+    love.style.transform = 'translateY(-80px)';
+    love.style.opacity = '0';
   });
   // remove after 1s
   setTimeout(() => {
-    if (kiss.parentNode) kiss.parentNode.removeChild(kiss);
-  }, 1000);
+    if (love.parentNode) love.parentNode.removeChild(love);
+  }, 5000);
 }
 
 export default App;
